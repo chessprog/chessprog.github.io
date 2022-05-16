@@ -124,7 +124,7 @@ window.addEventListener('load', function(){
         }
     }
 
-
+    
     
     
     let input = new InputHandler();
@@ -141,7 +141,19 @@ window.addEventListener('load', function(){
     }
 
     let scrollOffset = 0
+    let gameOver = false
     
+    //Display text 
+    function displayWinningText(context){
+        context.font = '40px Helvetica';
+        
+        //Display text when you win
+        if(gameOver){
+            context.textAlign = 'center';
+            context.fillStyle = 'black';
+            context.fillText('Congratulations', canvas.width/2, 200);
+        }
+    }
     //Reset game and initate game
     function init(){
         player = new Player();
@@ -160,7 +172,7 @@ window.addEventListener('load', function(){
     }
     //Function that draws, and animate the platform, characters, background
     function animate(){
-        requestAnimationFrame(animate)
+        if(!gameOver) requestAnimationFrame(animate);
         backgrounds.forEach(background => {
             background.draw();
             background.update();
@@ -169,7 +181,7 @@ window.addEventListener('load', function(){
         //Draw player and updates any movement
         player.draw(ctx);
         player.update();
-
+        displayWinningText(ctx);
         
 
         //Draws platform
@@ -217,11 +229,12 @@ window.addEventListener('load', function(){
             }
            })
         
-        // win condition
+        // win condition and stops the game
         if(scrollOffset > 3300){
+            gameOver = true;
             console.log('you win')
         }
-
+        
         // lose condition
         if(player.position.y > canvas.height){
             init()
@@ -234,4 +247,3 @@ window.addEventListener('load', function(){
 
 
 });
-
